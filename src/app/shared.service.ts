@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SharedService {
 
-  constructor() { }
   private contactNumberSubject = new BehaviorSubject<string>('');
   contactNumber$ = this.contactNumberSubject.asObservable();
 
