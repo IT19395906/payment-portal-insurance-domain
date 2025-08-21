@@ -30,4 +30,23 @@ export class LinkService {
 
     return this.http.post<any>(url, data, httpOptions);
   }
+
+  sendOTP(policyNo: any, otp: any): Observable<any> {
+    const queryParams = new HttpParams().set('policyNo', policyNo).set('otp', otp);
+    const url = `${this.apiUrl}/test?${queryParams.toString()}`;
+
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', }), };
+
+    return this.http.post<any>(url, {}, httpOptions);
+  }
+
+  getOTP(policyNo: any): Observable<any> {
+    const queryParams = new HttpParams().set('policyNo', policyNo);
+    const url = `${this.apiUrl}/test?${queryParams.toString()}`;
+
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', }), };
+
+    return this.http.post<any>(url, policyNo, httpOptions);
+  }
+
 }

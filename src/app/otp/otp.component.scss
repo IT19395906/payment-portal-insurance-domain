@@ -1,0 +1,184 @@
+@use '@angular/material' as mat;
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  max-height: 100px;
+}
+
+.cardStyle {
+  border: 2px solid #1476df;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.otp-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #333;
+}
+
+.otp-subtitle {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.otp-input-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.countdown-timer {
+  text-align: center;
+  font-size: 1rem;
+  color: #d9534f;
+  margin-top: 1rem;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.otp-input {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.otp-input:focus {
+  border-color: #1476df;
+  outline: none;
+}
+
+.invalid {
+  border-color: red !important;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+button {
+  width: 45%;
+  margin: 0 5px;
+}
+
+.result-message {
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .logo {
+    max-height: 80px;
+  }
+
+  .cardStyle {
+    padding: 15px;
+  }
+
+  .otp-container {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  .otp-input-group {
+    justify-content: space-evenly;
+  }
+
+  .otp-input {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+
+  .actions button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .otp-subtitle {
+    font-size: 12px;
+    margin-bottom: 15px;
+  }
+
+  .countdown-timer {
+    font-size: 0.9rem;
+  }
+
+  .verify {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .otp-container {
+    padding: 10px;
+    max-width: 95%;
+  }
+
+  .otp-input {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .actions button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .otp-subtitle {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .countdown-timer {
+    font-size: 0.8rem;
+  }
+
+  .logo {
+    max-height: 70px;
+  }
+
+  .result-message {
+    font-size: 14px;
+  }
+
+  .verify {
+    margin-bottom: 1rem;
+  }
+}

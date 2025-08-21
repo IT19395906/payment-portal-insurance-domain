@@ -1,0 +1,61 @@
+<div class="container mt-5">
+  <div class="text-center mb-3">
+    <h1 style="color: #0f4681;"><b>Welcome</b></h1>
+    <img src="assets/logo.png" alt="Logo" class="logo">
+  </div>
+  <h1 class="text-center"><b>My Pay</b></h1>
+  <mat-card class="p-5 inputSize cardStyle" style=" justify-self: center;">
+    <div *ngIf="loading" class="loader">
+      <img src="assets/loading.gif" alt="Loading...">
+    </div>
+    <div  *ngIf="!loading">
+      <p><b>OTP Verification</b></p>
+      <div class="form-text text-muted">
+        <small><i>One Time Password Will Be Sent To The Below Phone Number </i></small>
+      </div>
+      <form [formGroup]="customerDetailsForm">
+        <mat-form-field appearance="outline" class="w-100 mt-3">
+          <mat-label>Contact No</mat-label>
+          <input matInput formControlName="contactNo" readonly>
+        </mat-form-field>
+        <button  *ngIf="!otpRequested" mat-raised-button color="primary" type="button" (click)="getOtp()" class="w-100"
+          ><mat-icon>app_shortcut</mat-icon>Request
+          OTP</button>
+        <div *ngIf="isCountingDown" class="countdown-timer">
+          <p>{{ countdown }} seconds remaining</p>
+        </div>
+      </form>
+      <div *ngIf="isContactNumber && otpRequested">
+        <div class="otp-container mt-5">
+          <h2>Enter OTP</h2>
+          <p class="otp-subtitle">Please enter the 6-digit OTP sent to your mobile number.</p>
+         
+          <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+            <div class="otp-input-group">
+              <input *ngFor="let digit of otp; let i = index" type="text" maxlength="1" class="otp-input" inputmode="numeric" pattern="\d*"
+                     [formControlName]="'digit' + (i + 1)" 
+                     (input)="onOtpChange($event, i)" 
+                     [ngClass]="{'invalid': otpForm.controls['digit' + (i + 1)].invalid && otpSubmitted}">
+            </div>
+            
+            <div *ngIf="otpSubmitted" class="result-message">
+              <p *ngIf="otpSubmitted && otpSuccess" class="success-message">OTP Verified Successfully!</p>    
+            </div>
+
+            <div class="actions">
+              <button type="submit" class="verify" mat-raised-button color="primary" [disabled]="!otpForm.valid">
+                Verify OTP
+              </button>
+              <button type="button" mat-raised-button color="accent" [disabled]="otpSuccess || isCountingDown || !otpRequested"
+                (click)="resendOtp()">
+                Resend OTP
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  <br />
+  <br />
+</div>

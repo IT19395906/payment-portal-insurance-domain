@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main/main.component';
+import { OtpComponent } from './otp/otp.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
-  // { path: 'otp', component: OtpComponent }
+  { path: 'otp', component: OtpComponent }
 ];
 
 @NgModule({
