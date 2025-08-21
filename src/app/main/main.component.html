@@ -47,7 +47,7 @@
           <mat-label>Contact No</mat-label>
           <input matInput formControlName="contactNo" readonly>
         </mat-form-field>
-        <div *ngIf="!otpVerified" style="display: flex; justify-content: flex-end; margin-top: 5%;">
+        <div style="display: flex; justify-content: flex-end; margin-top: 5%;">
           <button mat-raised-button color="primary" type="button" (click)="otp()"><mat-icon>send</mat-icon>Request
             OTP</button>
         </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -13,13 +13,12 @@ import { SharedService } from '../shared.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent {
+export class MainComponent implements OnInit, AfterViewInit {
 
   customerDetailsForm!: FormGroup;
   customerData!: any;
   loading = false;
   searched = false;
-  otpVerified = false;
   isNeedToSendSMS: boolean = false;
   isValidPolicy!: boolean;
   isValidVehicle!: boolean;
@@ -33,10 +32,6 @@ export class MainComponent {
   ) { }
 
   ngOnInit(): void {
-    this.initCustomerDetailForm();
-  }
-
-  initCustomerDetailForm() {
     this.customerDetailsForm = this.formBuilder.group({
       policyType: [''],
       policyNo: ['', [Validators.required]],
@@ -69,68 +64,64 @@ export class MainComponent {
   searchForPolicy(Event: any) {
     let inputValue = this.customerDetailsForm.controls['policyNo'].value.trim();
 
-    let paymentSearchDto = {} as PaymentSearchDto;
-
-    paymentSearchDto.policyNo = this.isValidPolicy ? inputValue : null;
-    paymentSearchDto.vehicleNo = this.isValidVehicle ? inputValue : null;
+    const paymentSearchDto: PaymentSearchDto = {
+      policyNo : this.isValidPolicy ? inputValue : null,
+      vehicleNo : this.isValidVehicle ? inputValue : null
+    };
 
     if (inputValue == null || inputValue == '') { this.toastr.error('Please enter Policy Number or Vehicle Number', 'Error'); return }
-    if (this.customerDetailsForm.valid) {
-      this.loading = true;
-      this.link.getPolicyDetails(paymentSearchDto).subscribe((response) => {
+    if (!this.customerDetailsForm.valid) { this.toastr.error('Customer Form Is Invalid', 'Error'); return; }
 
-        if (response.message == 'Contact Details Not Found') {
-          this.loading = false;
-          this.searched = false;
-          Swal.fire('Error', 'The contact details for this policy are currently unavailable', 'error');
+    this.loading = true;
+    this.link.getPolicyDetails(paymentSearchDto).subscribe((res) => {
 
-        } else if (response.data.contractStatus == 'Cancelled') {
-          this.loading = false;
-          this.searched = false;
-          Swal.fire({
-            title: "Processing payment for the canceled policy. Once completed, please contact the call center or the relevant marketing officer for reinstatement. Additional charges apply",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes",
-            cancelButtonText: 'No'
-          }).then((result) => {
-
-            if (result.isConfirmed) {
-              this.customerData = response.data;
-              this.searched = true;
-              this.loading = false;
-              this.sharedService.updateContactNumber(this.customerData.phone);
-              this.sharedService.updatePolicyData(this.customerData);
-              this.patchValueToCustomerDetailsForm();
-            }
-
-          });
-        }
-        else {
-          this.customerData = response.data;
-          this.searched = true;
-          this.loading = false;
-          this.sharedService.updateContactNumber(this.customerData.phone);
-          this.sharedService.updatePolicyData(this.customerData);
-          this.patchValueToCustomerDetailsForm();
-        }
-      }, (error) => {
-        if (error.error.message == '') {
-          Swal.fire('Error', 'Phone Number Is Not Provided', 'error');
-        } else {
-          Swal.fire('Error', 'Invalid Policy No or Vehicle No', 'error');
-        }
-
-        this.searched = false;
+      if (res.message == 'Contact Details Not Found') {
         this.loading = false;
-      });
-    }
-    else {
-      this.toastr.error('Customer Form Is Invalid', 'Error');
-    }
+        this.searched = false;
+        Swal.fire('Error', 'The contact details for this policy are currently unavailable', 'error');
 
+      } else if (res.data.contractStatus == 'Cancelled') {
+        this.loading = false;
+        this.searched = false;
+        Swal.fire({
+          title: "Processing payment for the canceled policy. Once completed, please contact the call center or the relevant marketing officer for reinstatement. Additional charges apply",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Yes",
+          cancelButtonText: 'No'
+        }).then((result) => {
+
+          if (result.isConfirmed) {
+            this.customerData = res.data;
+            this.searched = true;
+            this.loading = false;
+            this.sharedService.updateContactNumber(this.customerData.phone);
+            this.sharedService.updatePolicyData(this.customerData);
+            this.patchValueToCustomerDetailsForm();
+          }
+
+        });
+      }
+      else {
+        this.customerData = res.data;
+        this.searched = true;
+        this.loading = false;
+        this.sharedService.updateContactNumber(this.customerData.phone);
+        this.sharedService.updatePolicyData(this.customerData);
+        this.patchValueToCustomerDetailsForm();
+      }
+    }, (error) => {
+      if (error.error.message == '') {
+        Swal.fire('Error', 'Phone Number Is Not Provided', 'error');
+      } else {
+        Swal.fire('Error', 'Invalid Policy No or Vehicle No', 'error');
+      }
+
+      this.searched = false;
+      this.loading = false;
+    });
   }
 
   onBlur(event: any) {
