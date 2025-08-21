@@ -1,1 +1,59 @@
-<p>main works!</p>
+<div class="container mt-5">
+  <div class="text-center mb-3">
+    <h1 style="color: #0f4681;"><b>Welcome</b></h1>
+    <img src="assets/logo.png" alt="Logo" class="logo">
+  </div>
+  <h1 class="text-center"><b>My Pay</b></h1>
+  <div *ngIf="loading" class="loader">
+    <img src="assets/loading.gif" alt="Loading...">
+  </div>
+  <mat-card *ngIf="!loading" class="p-5 inputSize no-shadow"
+    style="max-width: 45%; justify-self: center; margin: 0 auto;">
+
+    <form [formGroup]="customerDetailsForm">
+      <div class="policyContainer">
+        <mat-form-field appearance="outline" class="w-100 mt-2">
+          <mat-label>Policy No / Vehicle No</mat-label>
+          <input matInput type="text" formControlName="policyNo" required maxlength="12" (blur)="onBlur($event)">
+          <mat-icon matSuffix style="font-size: 1em; color: #90caf9;cursor: pointer; display: flex;align-items: center;"
+            [customTooltip]="'<u>Valid Vehicle No</u><ul><li>SG KO-XXXX</li><li>WP CAV-XXXX</li><li>WP 64-XXXX</li><li>UR-XXXX</li><li>W23-XXXX</li></ul><u>Valid Policy No</u><ul><li>LP0000000000</li></ul>'">info
+          </mat-icon>
+          <mat-error *ngIf="customerDetailsForm.get('policyNo')?.hasError('required')">Please Enter Policy No
+             or Vehicle No</mat-error>
+          <mat-error *ngIf="customerDetailsForm.get('policyNo')?.hasError('invalidPolicyOrVehicle')">
+          Policy No or Vehicle No is Invalid
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="button" class="w-75 mb-3"
+          (click)="searchForPolicy($event)"><mat-icon>search</mat-icon>Search </button>
+      </div>
+      <div *ngIf="customerData && searched">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Line of Business</mat-label>
+          <input matInput formControlName="policyType" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Policy Holder</mat-label>
+          <input matInput formControlName="name" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Contact No</mat-label>
+          <input matInput formControlName="contactNo" readonly>
+        </mat-form-field>
+        <div *ngIf="!otpVerified" style="display: flex; justify-content: flex-end; margin-top: 5%;">
+          <button mat-raised-button color="primary" type="button" (click)="otp()"><mat-icon>send</mat-icon>Request
+            OTP</button>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+  <br />
+  <br />
+</div>
